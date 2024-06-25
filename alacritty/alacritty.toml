@@ -1,0 +1,28 @@
+[font]
+normal = {family = "MartianMono", style = "Regular"}
+
+
+[keyboard]
+bindings = [
+    { key = "m", mods = "Control", action = "IncreaseFontSize" },
+    { key = "n", mods = "Control", action = "DecreaseFontSize" }
+]
+
+# Default colors
+[colors.primary]
+background = '#0d0c0c'
+foreground = '#B3B1AD'
+
+# Normal colors
+[colors.normal]
+black   = '#01060E'
+red     = '#EA6C73'
+green   = '#91B362'
+yellow  = '#F9AF4F'
+blue    = '#53BDFA'
+magenta = '#FAE994'
+cyan    = '#90E1C6'
+white   = '#C7C7C7'
+
+
+

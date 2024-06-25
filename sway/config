@@ -1,0 +1,67 @@
+### Variables
+set $mod Mod1
+set $left s
+set $right g
+set $up f
+set $down d
+set $term alacritty
+set $menu wofi --show drun -i
+
+
+
+output * bg ~/Pictures/bg.jpg fill
+
+
+
+### key bindings
+bindsym $mod+c exec $term
+bindsym $mod+q kill
+bindsym $mod+v exec $menu
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+e exec swaynag -t warning -m "you pressed exit" -b "yes exit" "swaymsg exit"
+
+bindsym $mod+$left focus left
+bindsym $mod+$right focus right
+bindsym $mod+$up focus up
+bindsym $mod+$down focus down
+
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$right move right
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$down move down
+
+
+bar {
+  position top
+  status_command while date +"%Y-%m-%d %l:%M:%S %p"; do sleep 1; done
+
+  colors {
+    statusline #ffffff
+    background #323232
+    inactive_workspace #32323200 #32323200 #5c5c5c
+  }
+}
+
+bindsym $mod+a fullscreen toggle
+
+# Resizing windows
+mode "resize" {
+    bindsym $left resize grow width 25px
+    bindsym $down resize grow height 25px
+    bindsym $up resize shrink height 25px
+    bindsym $right resize shrink width 25px
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Monitor 1 (Dell S2716DG on DP-1)
+output DP-1 resolution 2560x1440@143.998Hz position 0,0
+
+# Monitor 2 (Dell S2716DG on DP-2)
+output DP-2 resolution 2560x1440@143.998Hz position 2560,0
+
+
+# Assign workspaces to specific monitors
+workspace 1 output DP-1
+workspace 2 output DP-2

@@ -9,6 +9,7 @@ vim.cmd("set relativenumber")
 vim.cmd("set splitright")
 vim.cmd("set smartindent")
 vim.cmd("set autoindent")
+vim.cmd("set clipboard+=unnamedplus")
 
 -- KEY REMAPS
 -- quality of live remaps

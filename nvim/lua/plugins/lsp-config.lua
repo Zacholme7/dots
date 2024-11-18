@@ -61,7 +61,7 @@ return {
         })
       })
 
-      -- Set up signature help
+      -- Set up signature help with no emoji
       require("lsp_signature").setup({
         bind = true,
         handler_opts = { border = "rounded" },
@@ -85,9 +85,12 @@ return {
       vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
       vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
       vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
-      vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format { async = true } end, opts)
       vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
       vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, opts)
+      local opts = { noremap = true, silent = true }
+      vim.keymap.set("n", "<leader>f", function()
+          vim.lsp.buf.format({ async = true })
+      end, opts)
 
       -- Enable inlay hints for all supported languages
       vim.api.nvim_create_autocmd("LspAttach", {
@@ -123,12 +126,16 @@ return {
           }
         },
         on_attach = function(client, bufnr)
-          -- Enable signature help for this buffer
+          -- Enable signature help for this buffer with no emoji
           require("lsp_signature").on_attach({
             bind = true,
             handler_opts = { border = "rounded" },
             floating_window = true,
             toggle_key = '<C-k>',
+            hint_enable = true,
+            hint_prefix = "", -- Removed emoji/panda
+            hint_scheme = "String", -- Changed hint color scheme
+            padding = ' ',
           }, bufnr)
 
           -- Enable inlay hints for this buffer

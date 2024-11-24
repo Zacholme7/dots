@@ -28,6 +28,9 @@ return {
           width = 60,
           height = 30,
         },
+        inlay_hints = {
+          auto = false,
+        }
       },
       server = {
         capabilities = capabilities,
@@ -46,6 +49,7 @@ return {
           },
         },
         on_attach = function(client, bufnr)
+          rt.inlay_hints.disable();
           local opts = { buffer = bufnr }
           -- Rust-tools specific bindings
           vim.keymap.set("n", "K", rt.hover_actions.hover_actions, opts)

@@ -11,6 +11,68 @@ vim.cmd("set smartindent")
 vim.cmd("set autoindent")
 vim.cmd("set clipboard+=unnamedplus")
 
+local function swap_splits(direction)
+    local current_win = vim.api.nvim_get_current_win()
+    local current_buf = vim.api.nvim_win_get_buf(current_win)
+    
+    -- Save current window state
+    local current_state = {
+        cursor = vim.api.nvim_win_get_cursor(current_win),
+        view = vim.fn.winsaveview(),
+        filetype = vim.bo[current_buf].filetype
+    }
+    
+    -- Check for NeoTree
+    if current_state.filetype == "neo-tree" then return end
+    
+    -- Try to navigate to adjacent window
+    vim.cmd("wincmd " .. direction)
+    local target_win = vim.api.nvim_get_current_win()
+    if current_win == target_win then return end  -- No adjacent window
+    
+    -- Save target window state
+    local target_buf = vim.api.nvim_win_get_buf(target_win)
+    local target_state = {
+        cursor = vim.api.nvim_win_get_cursor(target_win),
+        view = vim.fn.winsaveview(),
+        filetype = vim.bo[target_buf].filetype
+    }
+    
+    -- Check target for NeoTree
+    if target_state.filetype == "neo-tree" then
+        vim.api.nvim_set_current_win(current_win)
+        return
+    end
+    
+    -- Perform swap based on buffer equality
+    if current_buf ~= target_buf then
+        -- Swap buffers
+        vim.api.nvim_win_set_buf(current_win, target_buf)
+        vim.api.nvim_win_set_buf(target_win, current_buf)
+    end
+    
+    -- Always swap window states (cursor, scroll position, etc.)
+    vim.api.nvim_win_set_cursor(current_win, target_state.cursor)
+    vim.fn.winrestview(target_state.view)
+    vim.api.nvim_win_set_cursor(target_win, current_state.cursor)
+    vim.fn.winrestview(current_state.view)
+    
+    -- Maintain focus in the original window
+    vim.api.nvim_set_current_win(target_win)
+end
+
+
+
+-- Key mappings using Ctrl-d
+vim.keymap.set('n', '<C-o>', function() swap_splits('h') end, 
+    { noremap = true, silent = true, desc = 'Swap with left split' })
+vim.keymap.set('n', '<C-.>', function() swap_splits('l') end, 
+    { noremap = true, silent = true, desc = 'Swap with right split' })
+vim.keymap.set('n', '<C-d>j', function() swap_splits('j') end, 
+    { noremap = true, silent = true, desc = 'Swap with below split' })
+vim.keymap.set('n', '<C-d>k', function() swap_splits('k') end, 
+    { noremap = true, silent = true, desc = 'Swap with above split' })
+
 -- KEY REMAPS
 -- quality of live remaps
 vim.keymap.set('i', 'kj', '<Esc>')

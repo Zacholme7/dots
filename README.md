@@ -1,5 +1,4 @@
 # Neovim-config
 This is my personal dotfile configuration. Consists of neovim, alacritty, and sway. This is a highly customized configutation tailored to my custom keyboard. 
 
-![Screenshot from 2024-01-07 18-17-15](https://github.com/Zacholme7/Neovim-Config/assets/79027434/48170a49-9cbf-43db-a33e-b2c9667aca23)
-
+<img width="1727" alt="Screenshot 2025-06-10 at 8 33 28 PM" src="https://github.com/user-attachments/assets/54998740-e7db-4a9f-90f3-686ac8b58eea" />

@@ -1,22 +1,37 @@
 return {
-    "nvim-treesitter/nvim-treesitter", 
+  {
+    "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    config = function()
-        local config = require("nvim-treesitter.configs")
-        config.setup({
-            ensure_installed = {
-                "lua", 
-                "cpp", 
-                "python",
-                "markdown",
-                "markdown_inline",  -- This is important for markdown hover
-                "rust",            -- Since you use rust
-                "c",              -- Since you use cpp
-                "vim",
-                "vimdoc",         -- For help files
-            },
-            highlight = { enable = true },
-            indent = { enable = true },
-        })
-    end
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TSUpdateSync" },
+    opts = {
+      ensure_installed = {
+        "bash",
+        "c",
+        "cpp",
+        "lua",
+        "markdown",
+        "markdown_inline",
+        "python",
+        "rust",
+        "toml",
+        "vim",
+        "vimdoc",
+      },
+      highlight = { enable = true },
+      indent = { enable = true },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<C-space>",
+          node_incremental = "<C-space>",
+          scope_incremental = false,
+          node_decremental = "<bs>",
+        },
+      },
+    },
+    config = function(_, opts)
+      require("nvim-treesitter.configs").setup(opts)
+    end,
+  },
 }

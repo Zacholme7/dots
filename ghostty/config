@@ -1,0 +1,61 @@
+# Dark, understated terminal styling
+theme = TokyoNight
+window-theme = ghostty
+
+# Neutral near-black canvas with Tokyo Night accents
+background = 08090c
+foreground = c9d1d9
+cursor-color = 7aa2f7
+selection-background = 1e3a5f
+selection-foreground = e6edf3
+
+# Crisp type with comfortable breathing room
+font-family = JetBrains Mono
+font-size = 12
+window-padding-x = 12
+window-padding-y = 10
+window-padding-balance = true
+
+# Keep the terminal opaque and distraction-free
+background-opacity = 1
+cursor-style = block
+cursor-style-blink = false
+window-decoration = auto
+confirm-close-surface = false
+
+# Tab navigation: hold Alt and use the left/right navigation keys
+keybind = alt+s=previous_tab
+keybind = alt+g=next_tab
+keybind = alt+t=new_tab
+keybind = alt+w=close_tab:this
+
+# Quick split and utility controls
+keybind = alt+v=new_split:right
+keybind = alt+b=new_split:down
+keybind = alt+p=toggle_command_palette
+keybind = alt+z=toggle_split_zoom
+keybind = alt+f=start_search
+keybind = alt+o=toggle_tab_overview
+keybind = alt+r=prompt_tab_title
+keybind = alt+m>h=move_tab:-1
+keybind = alt+m>l=move_tab:1
+keybind = alt+u=scroll_page_up
+keybind = alt+d=scroll_page_down
+
+# Font zoom
+keybind = alt+==increase_font_size:1
+keybind = alt+-=decrease_font_size:1
+keybind = alt+backspace=reset_font_size
+
+# Vim-style split navigation
+keybind = alt+h=goto_split:left
+keybind = alt+j=goto_split:down
+keybind = alt+k=goto_split:up
+keybind = alt+l=goto_split:right
+keybind = alt+q=close_surface
+
+# Vim-style split resizing in 10-cell steps
+keybind = alt+shift+h=resize_split:left,10
+keybind = alt+shift+j=resize_split:down,10
+keybind = alt+shift+k=resize_split:up,10
+keybind = alt+shift+l=resize_split:right,10

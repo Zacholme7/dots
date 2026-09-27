@@ -58,11 +58,10 @@ return {
 
 	{
 		"j-hui/fidget.nvim",
-		tag = "legacy",
 		event = "LspAttach",
 		opts = {
-			text = { spinner = "moon" },
-			window = { blend = 0 },
+			progress = { display = { progress_icon = { "moon" } } },
+			notification = { window = { winblend = 0 } },
 		},
 	},
 
@@ -89,7 +88,7 @@ return {
 	},
 
 	{
-		"echasnovski/mini.indentscope",
+		"nvim-mini/mini.indentscope",
 		version = false,
 		event = { "BufReadPost", "BufNewFile" },
 		opts = {

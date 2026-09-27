@@ -19,8 +19,6 @@ map("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
 -- Window resizing
 map("n", "<A-h>", ":vertical resize +2<CR>", { silent = true })
 map("n", "<A-l>", ":vertical resize -2<CR>", { silent = true })
-map("n", "<A-k>", ":resize +2<CR>", { silent = true })
-map("n", "<A-j>", ":resize -2<CR>", { silent = true })
 
 -- Buffer management
 map("n", "<leader>x", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
@@ -75,8 +73,8 @@ map("n", "<C-d>j", function() swap_splits("j") end, { desc = "Swap with below sp
 map("n", "<C-d>k", function() swap_splits("k") end, { desc = "Swap with above split" })
 
 -- Diagnostic navigation
-map("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-map("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+map("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, { desc = "Go to next diagnostic" })
+map("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, { desc = "Go to previous diagnostic" })
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line diagnostics" })
 
 -- Quickfix

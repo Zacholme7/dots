@@ -1,8 +1,8 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
-		tag = "0.1.8", -- Updated to latest version
-		dependencies = { "nvim-lua/plenary.nvim" },
+		version = "*", -- latest release
+		dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-ui-select.nvim" },
 		config = function()
 			-- Setup telescope with better defaults
 			require("telescope").setup({
@@ -25,14 +25,12 @@ return {
 					-- Improved mappings (avoiding conflicts with your existing keymaps)
 					mappings = {
 						i = {
-							-- Use Ctrl-h to show which_key help (doesn't conflict with your window nav)
-							["<C-h>"] = "which_key",
 							-- Better navigation that works with your style
 							["<C-j>"] = "move_selection_next",
 							["<C-k>"] = "move_selection_previous",
 							-- Quick close
 							["<C-q>"] = "close",
-							-- Send to quickfix (works with your ]q [q navigation)
+							-- Open in split
 							["<C-x>"] = "select_horizontal",
 							["<C-v>"] = "select_vertical",
 						},
@@ -44,6 +42,17 @@ return {
 							height = 0.4,
 							width = 0.6,
 							preview_cutoff = 40,
+						},
+					},
+				},
+				extensions = {
+					["ui-select"] = {
+						layout_strategy = "center",
+						layout_config = {
+							center = {
+								height = 0.4,
+								width = 0.5,
+							},
 						},
 					},
 				},
@@ -116,6 +125,8 @@ return {
 				},
 			})
 
+			require("telescope").load_extension("ui-select")
+
 			-- Configure preview window to show line numbers and highlight current line
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "TelescopePreviewerLoaded",
@@ -178,27 +189,6 @@ return {
 
 			-- Registers picker (great for paste workflows)
 			vim.keymap.set("n", '<leader>f"', builtin.registers, { desc = "Find registers" })
-		end,
-	},
-	{
-		"nvim-telescope/telescope-ui-select.nvim",
-		config = function()
-			-- Configure ui-select BEFORE loading the extension
-			require("telescope").setup({
-				extensions = {
-					["ui-select"] = {
-						layout_strategy = "center",
-						layout_config = {
-							center = {
-								height = 0.4,
-								width = 0.5,
-							},
-						},
-					},
-				},
-			})
-			-- Load the extension
-			require("telescope").load_extension("ui-select")
 		end,
 	},
 }

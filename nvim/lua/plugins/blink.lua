@@ -2,9 +2,7 @@ return {
 	{
 		"saghen/blink.cmp",
 		dependencies = { "rafamadriz/friendly-snippets" },
-		-- Use main branch for latest optimizations and build from source
-		version = "1.*", -- Remove this to track main
-		build = "cargo build --release",
+		version = "1.*", -- latest release; downloads the prebuilt Rust fuzzy matcher
 		opts = {
 			-- Performance: Use default keymap preset which is optimized
 			keymap = { preset = "default" },
@@ -82,7 +80,7 @@ return {
 				-- Visual: Enhanced documentation with faster display
 				documentation = {
 					auto_show = true,
-					auto_show_delay_ms = 100, -- Faster than your current 100ms
+					auto_show_delay_ms = 100,
 					update_delay_ms = 50,
 					treesitter_highlighting = true,
 					window = {
@@ -97,10 +95,8 @@ return {
 
 				-- Performance: Optimized trigger settings
 				trigger = {
-					prefetch_on_insert = true, -- Performance boost
 					show_on_keyword = true,
 					show_on_trigger_character = true,
-					keyword_length = 1, -- Removed this as it's not needed
 					-- Performance: Reduced blocked characters for better responsiveness
 					show_on_blocked_trigger_characters = { " ", "\n", "\t" },
 				},
@@ -154,11 +150,11 @@ return {
 				},
 			},
 
-			-- Performance: Use Rust implementation for best performance (built from source)
+			-- Prefer the prebuilt Rust fuzzy matcher.
 			fuzzy = {
-				implementation = "rust", -- Since we're building from source, we can enforce rust
+				implementation = "prefer_rust_with_warning",
 				-- Performance: Enable all performance features
-				use_frecency = true,
+				frecency = { enabled = true },
 				use_proximity = true,
 				-- Performance: Allow some typos but not too many
 				max_typos = function(keyword)

@@ -1,5 +1,11 @@
 local opt = vim.opt
 
+-- No plugins here use the remote-plugin providers; skip probing for them
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+
 -- General settings
 opt.expandtab = true
 opt.tabstop = 2
@@ -22,9 +28,9 @@ opt.smartcase = true
 opt.undofile = true
 opt.undolevels = 10000
 opt.wrap = false
-
 vim.g.clipboard = {
 	name = "OSC 52",
+
 	copy = {
 		["+"] = require("vim.ui.clipboard.osc52").copy("+"),
 		["*"] = require("vim.ui.clipboard.osc52").copy("*"),

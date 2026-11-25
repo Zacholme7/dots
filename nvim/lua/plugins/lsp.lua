@@ -9,7 +9,6 @@ return {
 				"rust-analyzer",
 				"lua-language-server",
 				"stylua",
-				"shellcheck",
 				"shfmt",
 				"prettier",
 			},
@@ -32,10 +31,7 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPre", "BufNewFile" },
-		dependencies = {
-			"mason-org/mason.nvim",
-			"saghen/blink.cmp",
-		},
+		dependencies = { "mason-org/mason.nvim" },
 		config = function()
 			vim.diagnostic.config({
 				virtual_text = {
@@ -45,7 +41,6 @@ return {
 					severity = { min = vim.diagnostic.severity.WARN },
 				},
 				severity_sort = true,
-				update_in_insert = false,
 				signs = {
 					text = {
 						[vim.diagnostic.severity.ERROR] = " ",
@@ -69,9 +64,8 @@ return {
 					-- Core navigation keymaps
 					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 					vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-					vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+					-- References use the built-in grr (also grn rename, gra code action, gri implementation)
 
 					-- Code actions and refactoring
 					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
@@ -83,23 +77,12 @@ return {
 				end,
 			})
 
-			local capabilities = require("blink.cmp").get_lsp_capabilities()
-			vim.lsp.config("*", { capabilities = capabilities })
-
+			-- Neovim runtime/plugin types come from lazydev.nvim (below)
 			vim.lsp.config("lua_ls", {
 				settings = {
 					Lua = {
-						runtime = { version = "LuaJIT" },
-						diagnostics = {
-							globals = { "vim" },
-							disable = { "missing-fields" },
-						},
-						workspace = {
-							library = vim.api.nvim_get_runtime_file("", true),
-							checkThirdParty = false,
-							maxPreload = 100000,
-							preloadFileSize = 10000,
-						},
+						diagnostics = { disable = { "missing-fields" } },
+						workspace = { checkThirdParty = false },
 						telemetry = { enable = false },
 						hint = { enable = false },
 						format = { enable = false }, -- Use stylua instead
@@ -147,13 +130,24 @@ return {
 		end,
 	},
 
+	-- Loads only the Neovim/plugin type definitions a Lua file actually uses
+	{
+		"folke/lazydev.nvim",
+		ft = "lua",
+		opts = {
+			library = {
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			},
+		},
+	},
+
 	{
 		"stevearc/conform.nvim",
 		event = { "BufWritePre" },
 		cmd = { "ConformInfo" },
 		keys = {
 			{
-				"<leader>f",
+				"<leader>cf",
 				function()
 					require("conform").format({ async = true, lsp_format = "fallback", timeout_ms = 1000 })
 				end,

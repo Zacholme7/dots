@@ -3,25 +3,32 @@ local autocmd = vim.api.nvim_create_autocmd
 
 -- Highlight on yank
 autocmd("TextYankPost", {
-  group = augroup("highlight_yank", { clear = true }),
-  callback = function()
-    vim.hl.on_yank({ timeout = 200 })
-  end,
+	group = augroup("highlight_yank", { clear = true }),
+	callback = function()
+		vim.hl.on_yank({ timeout = 200 })
+	end,
 })
 
 -- Close some filetypes with <q>
 autocmd("FileType", {
-  group = augroup("close_with_q", { clear = true }),
-  pattern = {
-    "help",
-    "lspinfo",
-    "man",
-    "notify",
-    "qf",
-    "checkhealth",
-  },
-  callback = function(event)
-    vim.bo[event.buf].buflisted = false
-    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-  end,
+	group = augroup("close_with_q", { clear = true }),
+	pattern = {
+		"help",
+		"man",
+		"qf",
+		"checkhealth",
+	},
+	callback = function(event)
+		vim.bo[event.buf].buflisted = false
+		vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+	end,
+})
+
+-- Start each session with an empty jump history, so "jump back" never lands
+-- in a file from a previous session
+autocmd("VimEnter", {
+	group = augroup("clear_jumps", { clear = true }),
+	callback = function()
+		vim.cmd.clearjumps()
+	end,
 })

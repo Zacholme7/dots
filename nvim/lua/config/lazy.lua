@@ -36,15 +36,13 @@ require("lazy").setup({
 		lazy = false,
 		version = false, -- always use the latest git commit
 	},
+	rocks = { enabled = false }, -- no plugin here needs luarocks
 	install = { colorscheme = { "onedark_dark", "habamax" } },
 	checker = {
 		enabled = true,
-		notify = false, -- get a notification when new updates are found
+		notify = false, -- shown in lualine instead (see plugins/ui.lua)
 	},
-	change_detection = {
-		enabled = true,
-		notify = false, -- get a notification when changes are found
-	},
+	change_detection = { notify = false },
 	performance = {
 		rtp = {
 			disabled_plugins = {

@@ -16,10 +16,24 @@ return {
 		event = "VeryLazy",
 		opts = {
 			options = {
-				icons_enabled = true,
-				theme = "auto",
 				component_separators = { left = "", right = "" },
 				section_separators = { left = "", right = "" },
+			},
+			sections = {
+				lualine_x = {
+					-- Pending plugin updates found by lazy's background checker
+					{
+						function()
+							return require("lazy.status").updates()
+						end,
+						cond = function()
+							return require("lazy.status").has_updates()
+						end,
+					},
+					"encoding",
+					"fileformat",
+					"filetype",
+				},
 			},
 		},
 	},
@@ -81,7 +95,6 @@ return {
 					"lazy",
 					"mason",
 					"neo-tree",
-					"notify",
 				},
 			},
 		},
@@ -106,7 +119,6 @@ return {
 					"lazy",
 					"mason",
 					"neo-tree",
-					"notify",
 				},
 				callback = function()
 					vim.b.miniindentscope_disable = true

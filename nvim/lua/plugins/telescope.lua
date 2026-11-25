@@ -2,26 +2,31 @@ return {
 	{
 		"nvim-telescope/telescope.nvim",
 		version = "*", -- latest release
-		dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-ui-select.nvim" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope-ui-select.nvim",
+			-- Compiled fzf sorter: faster matching plus fzf search syntax
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		},
 		config = function()
-			-- Setup telescope with better defaults
+			-- Ignores are passed to fd/rg as flags. Filtering results in Lua
+			-- (file_ignore_patterns) is far slower on a large codebase.
+			local ignored = { ".git", "node_modules", "__pycache__", "*.pyc", ".DS_Store" }
+			local fd = vim.fn.executable("fd") == 1 and "fd" or "fdfind" -- Ubuntu names it fdfind
+			local find_command = { fd, "--type", "f", "--hidden", "--color", "never", "--strip-cwd-prefix" }
+			local grep_globs = {}
+			for _, name in ipairs(ignored) do
+				vim.list_extend(find_command, { "--exclude", name })
+				table.insert(grep_globs, "--glob=!" .. name)
+			end
+
 			require("telescope").setup({
 				defaults = {
 					-- Visual improvements
 					prompt_prefix = "🔍 ",
 					selection_caret = "❯ ",
-					-- Better performance
-					file_ignore_patterns = {
-						"node_modules/.*",
-						"%.git/.*",
-						"%.DS_Store",
-						"%.pyc",
-						"__pycache__/.*",
-					},
-					-- Preview configuration for better line indication
-					preview = {
-						treesitter = true, -- Enable syntax highlighting
-					},
+					-- Skip previewing files over 1 MB so huge files do not stall the picker
+					preview = { filesize_limit = 1 },
 					-- Improved mappings (avoiding conflicts with your existing keymaps)
 					mappings = {
 						i = {
@@ -60,9 +65,10 @@ return {
 					-- Customize specific pickers for better workflow
 					find_files = {
 						previewer = false, -- Faster file finding
-						hidden = true, -- Show hidden files
+						find_command = find_command, -- includes hidden files
 					},
 					live_grep = {
+						additional_args = grep_globs,
 						-- Use horizontal layout with preview on the right
 						layout_strategy = "horizontal",
 						layout_config = {
@@ -70,15 +76,13 @@ return {
 								prompt_position = "top",
 								preview_width = 0.55,
 								results_width = 0.45,
-								mirror = false, -- This puts preview on the right
 							},
 							width = 0.9,
 							height = 0.8,
 						},
-						-- Enable previewer with line highlighting
-						previewer = true,
 					},
 					grep_string = {
+						additional_args = grep_globs,
 						-- Same layout as live_grep for consistency
 						layout_strategy = "horizontal",
 						layout_config = {
@@ -86,13 +90,10 @@ return {
 								prompt_position = "top",
 								preview_width = 0.55,
 								results_width = 0.45,
-								mirror = false, -- This puts preview on the right
 							},
 							width = 0.9,
 							height = 0.8,
 						},
-						-- Enable previewer with line highlighting
-						previewer = true,
 					},
 					buffers = {
 						previewer = false,
@@ -126,11 +127,12 @@ return {
 			})
 
 			require("telescope").load_extension("ui-select")
+			require("telescope").load_extension("fzf")
 
 			-- Configure preview window to show line numbers and highlight current line
 			vim.api.nvim_create_autocmd("User", {
 				pattern = "TelescopePreviewerLoaded",
-				callback = function(args)
+				callback = function()
 					-- Enable line numbers in preview
 					vim.wo.number = true
 					vim.wo.relativenumber = false
@@ -146,7 +148,7 @@ return {
 			local builtin = require("telescope.builtin")
 
 			-- File operations (using 'f' prefix to match your pattern)
-			vim.keymap.set("n", "ff", builtin.find_files, { desc = "Find files" })
+			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
 			vim.keymap.set("n", "<leader>df", builtin.live_grep, { desc = "Live grep" })
 			vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find buffers" })
 			vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Find old files" })

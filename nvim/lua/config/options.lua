@@ -16,18 +16,18 @@ opt.number = true
 opt.relativenumber = true
 opt.splitright = true
 opt.smartindent = true
-opt.autoindent = true
 opt.clipboard = "unnamedplus"
 opt.signcolumn = "yes"
 opt.updatetime = 100
 opt.timeoutlen = 300
-opt.completeopt = "menu,menuone,noselect"
 opt.termguicolors = true
 opt.ignorecase = true
 opt.smartcase = true
 opt.undofile = true
 opt.undolevels = 10000
 opt.wrap = false
+-- Jump history behaves like a browser's back/forward and drops closed buffers
+opt.jumpoptions = "stack,clean"
 vim.g.clipboard = {
 	name = "OSC 52",
 
